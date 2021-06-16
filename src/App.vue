@@ -1,15 +1,23 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <navigation />
       <router-view />
+      <footer-vue></footer-vue>
     </div>
   </div>
 </template>
 
 <script>
+import FooterVue from './components/Footer.vue';
+import Navigation from './components/Navigation.vue';
+
 export default {
-  name: "app",
-  components: {},
+  name: 'app',
+  components: {
+    Navigation,
+    FooterVue,
+  },
   data() {
     return {};
   },
@@ -21,13 +29,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .app {
@@ -37,7 +45,7 @@ export default {
 }
 
 .container {
-  max-width: 1440px;
+  max-width: 144rem;
   margin: 0 auto;
 }
 
