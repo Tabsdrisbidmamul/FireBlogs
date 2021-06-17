@@ -2,18 +2,18 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" :to="{ name: 'Home' }"
-          >FireBlogs</router-link
-        >
+        <router-link class="header" :to="homeLink">FireBlogs</router-link>
       </div>
 
       <div class="nav-links">
         <transition name="desktop-nav" mode="out-in">
           <ul v-show="!mobile">
-            <router-link class="link" to="#">Home</router-link>
-            <router-link class="link" to="#">Blogs</router-link>
+            <router-link class="link" :to="homeLink">Home</router-link>
+            <router-link class="link" :to="blogsLink">Blogs</router-link>
             <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" to="#">Login/Register</router-link>
+            <router-link class="link" :to="authLink"
+              >Login/Register</router-link
+            >
           </ul>
         </transition>
       </div>
@@ -25,10 +25,10 @@
 
     <transition name="mobile-nav" mode="out-in">
       <ul class="mobile-nav" v-show="mobileNav">
-        <router-link class="link" to="#">Home</router-link>
-        <router-link class="link" to="#">Blogs</router-link>
+        <router-link class="link" :to="homeLink">Home</router-link>
+        <router-link class="link" :to="blogsLink">Blogs</router-link>
         <router-link class="link" to="#">Create Post</router-link>
-        <router-link class="link" to="#">Login/Register</router-link>
+        <router-link class="link" :to="authLink">Login/Register</router-link>
       </ul>
     </transition>
   </header>
@@ -48,6 +48,17 @@ export default {
       mobileNav: null,
       windowWidth: null,
     };
+  },
+  computed: {
+    homeLink() {
+      return { name: 'Home' };
+    },
+    blogsLink() {
+      return { name: 'Blogs' };
+    },
+    authLink() {
+      return { name: 'Login' };
+    },
   },
   methods: {
     checkScreen() {
@@ -104,6 +115,11 @@ nav {
       font-size: 24px;
       color: #000;
       text-decoration: none;
+      transition: 300ms color ease;
+
+      &:hover {
+        color: #1eb8b8;
+      }
     }
   }
 

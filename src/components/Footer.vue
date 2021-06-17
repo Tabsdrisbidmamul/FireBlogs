@@ -109,6 +109,12 @@ footer {
         @media (min-width: 800px) {
           text-align: initial;
         }
+
+        transition: 300ms color ease;
+
+        &:hover {
+          color: #1eb8b8;
+        }
       }
       ul {
         gap: 16px;
