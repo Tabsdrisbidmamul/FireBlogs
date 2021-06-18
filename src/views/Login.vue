@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrap">
-    <form class="login">
+    <form class="login" @submit.prevent="submitForm">
       <p class="login-register">
         Don't have an account?
         <router-link class="router-link" :to="registerLink"
@@ -10,18 +10,34 @@
       <h2>Login to FireBlogs</h2>
       <div class="inputs">
         <div class="input">
-          <input type="email" placeholder="Email" v-model="email" />
+          <input
+            type="email"
+            placeholder="Email"
+            v-model="email.val"
+            @blur="clearValidation('email')"
+            :class="{ invalid: !email.isValid }"
+          />
           <Email class="icon" />
         </div>
 
         <div class="input">
-          <input type="password" placeholder="Password" v-model="password" />
+          <input
+            type="password"
+            placeholder="Password"
+            v-model="password.val"
+            @blur="clearValidation('password')"
+            :class="{ invalid: !password.isValid }"
+          />
           <Password class="icon" />
         </div>
       </div>
       <router-link class="forgot-password" :to="forgotPasswordLink"
         >Forgot your password?</router-link
       >
+
+      <p class="error" v-if="!formIsValid">
+        Some values in the form are incorrect, please fix them before sending
+      </p>
 
       <button>Sign In</button>
       <div class="angle"></div>
@@ -42,9 +58,46 @@ export default {
   },
   data() {
     return {
-      email: '',
-      password: '',
+      email: {
+        val: '',
+        isValid: true,
+      },
+      password: {
+        val: '',
+        isValid: true,
+      },
+      formIsValid: true,
     };
+  },
+  methods: {
+    clearValidation(input) {
+      this[input].isValid = true;
+    },
+
+    validation() {
+      this.formIsValid = true;
+
+      if (this.email.val === '' || !this.email.val.includes('@')) {
+        this.email.isValid = false;
+        this.formIsValid = false;
+      }
+
+      if (this.password.val === '') {
+        this.password.isValid = false;
+        this.formIsValid = false;
+      }
+    },
+
+    submitForm() {
+      this.validation();
+
+      const formData = {
+        email: this.email.val,
+        password: this.password.val,
+      };
+
+      console.log(formData);
+    },
   },
   computed: {
     registerLink() {
@@ -187,5 +240,14 @@ export default {
       display: initial;
     }
   }
+}
+
+.invalid {
+  border-bottom: 2px solid #c0392b !important;
+}
+
+.error {
+  text-align: center;
+  color: #c0392b;
 }
 </style>
