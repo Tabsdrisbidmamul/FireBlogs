@@ -1,10 +1,11 @@
 <template>
-  <div class="reset-password">
+  <section>
     <Modal
       modalMessage="An Error Occurred"
-      v-show="modalActive"
+      :open="modalActive"
       @close-modal="closeModal"
     />
+    <Loading v-if="isLoading" />
     <div class="form-wrap">
       <form class="reset" @submit.prevent="submitForm">
         <p class="login-register">
@@ -30,11 +31,12 @@
       </form>
       <div class="background"></div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import Email from '../assets/Icons/envelope-regular.svg';
+import Loading from '../components/utils/Loading.vue';
 import Modal from '../components/utils/Modal.vue';
 
 export default {
@@ -42,6 +44,7 @@ export default {
   components: {
     Email,
     Modal,
+    Loading,
   },
   data() {
     return {
@@ -52,6 +55,7 @@ export default {
       modalActive: false,
       modalMessage: '',
       formIsValid: true,
+      isLoading: false,
     };
   },
   computed: {
@@ -93,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.reset-password {
+section {
   position: relative;
   .form-wrap {
     .reset {

@@ -1,7 +1,7 @@
 <template>
-  <div class="modal">
+  <div class="modal" v-if="open">
     <transition name="modal-animate">
-      <div class="modal-content" >
+      <div class="modal-content" v-if="open">
         <p>{{ this.modalMessage }}</p>
         <button @click="closeModal">Close</button>
       </div>
@@ -12,7 +12,17 @@
 <script>
 export default {
   name: 'modal',
-  props: ['modalMessage', 'show'],
+  props: {
+    modalMessage: {
+      type: String,
+      required: false,
+      default: 'An error Occurred',
+    },
+    open: {
+      type: Boolean,
+      required: true,
+    },
+  },
   emits: ['close-modal'],
   methods: {
     closeModal() {
@@ -50,31 +60,23 @@ export default {
   }
 }
 
-.modal-animate-enter {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-.modal-animate-enter-to {
-  opacity: 1;
-  transform: scale(1);
-}
-
 .modal-animate-enter-active {
-  transition: all 250ms ease;
-}
-
-.modal-animate-leave {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.modal-animate-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
+  animation: scale-fade 200ms ease-out;
 }
 
 .modal-animate-leave-active {
-  transition: all 250ms ease;
+  animation: scale-fade 200ms ease-in reverse;
+}
+
+@keyframes scale-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
