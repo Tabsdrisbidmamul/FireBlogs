@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-wrapper no-user">
+  <div class="blog-wrapper" :class="{ 'no-user': !isAuth }">
     <div class="blog-content">
       <div v-if="post.welcomeScreen">
         <h2>{{ post.title }}</h2>
@@ -41,6 +41,11 @@ export default {
   props: ['post'],
   components: {
     Arrow,
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters['authModule/isAuth'];
+    },
   },
 };
 </script>

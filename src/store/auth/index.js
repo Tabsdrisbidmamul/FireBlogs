@@ -25,7 +25,6 @@ export default {
       state.editPost = payload;
     },
     setProfileInfo(state, doc) {
-      console.log(doc);
       state.profileId = doc.id;
       state.profileFirstName = doc.data().firstName;
       state.profileLastName = doc.data().lastName;
@@ -55,16 +54,26 @@ export default {
     },
   },
   getters: {
+    isAuth(state) {
+      return !!state.user;
+    },
     user(state) {
       return state.user;
     },
     profile(state) {
       return {
+        id: state.profileId,
         userName: state.profileUsername,
         email: state.profileEmail,
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
       };
+    },
+    profileInitials(state) {
+      return state.profileInitials;
+    },
+    profileAdmin(state) {
+      return state.profileAdmin;
     },
   },
 };

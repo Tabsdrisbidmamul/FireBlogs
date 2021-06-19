@@ -7,14 +7,54 @@
 
       <div class="nav-links">
         <transition name="desktop-nav" mode="out-in">
-          <ul v-show="!mobile">
-            <router-link class="link" :to="homeLink">Home</router-link>
-            <router-link class="link" :to="blogsLink">Blogs</router-link>
-            <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" :to="authLink"
-              >Login/Register</router-link
+          <div class="nav-link-container" v-show="!mobile">
+            <ul :class="{ authFix: !isAuth }">
+              <router-link class="link" :to="homeLink">Home</router-link>
+              <router-link class="link" :to="blogsLink">Blogs</router-link>
+              <router-link class="link" to="#">Create Post</router-link>
+              <router-link class="link" :to="authLink" v-if="!isAuth"
+                >Login/Register</router-link
+              >
+            </ul>
+            <div
+              v-if="isAuth"
+              class="profile"
+              ref="profile"
+              @click="toggleProfile"
             >
-          </ul>
+              <span>{{ profileInitials }}</span>
+              <transition name="profile-animation">
+                <div class="profile-menu" v-show="profileIsVisible">
+                  <div class="info">
+                    <p class="initials">{{ profileInitials }}</p>
+                    <div class="right">
+                      <p>{{ fullName }}</p>
+                      <p>{{ userName }}</p>
+                      <p>{{ email }}</p>
+                    </div>
+                  </div>
+                  <div class="options">
+                    <div class="option">
+                      <router-link class="option" to="#">
+                        <userIcon class="icon" />
+                        <p>Profile</p>
+                      </router-link>
+                    </div>
+                    <div class="option">
+                      <router-link class="option" to="#">
+                        <adminIcon class="icon" />
+                        <p>Admin</p>
+                      </router-link>
+                    </div>
+                    <div @click="signOut" class="option">
+                      <signOutIcon class="icon" />
+                      <p>Sign Out</p>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
         </transition>
       </div>
     </nav>
@@ -28,25 +68,37 @@
         <router-link class="link" :to="homeLink">Home</router-link>
         <router-link class="link" :to="blogsLink">Blogs</router-link>
         <router-link class="link" to="#">Create Post</router-link>
-        <router-link class="link" :to="authLink">Login/Register</router-link>
+        <router-link v-if="!isAuth" class="link" :to="authLink"
+          >Login/Register</router-link
+        >
       </ul>
     </transition>
   </header>
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import menuIcon from '../assets/Icons/bars-regular.svg';
+import userIcon from '../assets/Icons/user-alt-light.svg';
+import adminIcon from '../assets/Icons/user-crown-light.svg';
+import signOutIcon from '../assets/Icons/sign-out-alt-regular.svg';
 
 export default {
   name: 'navigation',
   components: {
     menuIcon,
+    userIcon,
+    adminIcon,
+    signOutIcon,
   },
   data() {
     return {
       mobile: null,
       mobileNav: null,
       windowWidth: null,
+      profileIsVisible: false,
     };
   },
   computed: {
@@ -58,6 +110,21 @@ export default {
     },
     authLink() {
       return { name: 'Login' };
+    },
+    profileInitials() {
+      return this.$store.getters['authModule/profileInitials'];
+    },
+    isAuth() {
+      return this.$store.getters['authModule/isAuth'];
+    },
+    fullName() {
+      return `${this.$store.getters['authModule/profile'].firstName} ${this.$store.getters['authModule/profile'].lastName}`;
+    },
+    userName() {
+      return this.$store.getters['authModule/profile'].userName;
+    },
+    email() {
+      return this.$store.getters['authModule/profile'].email;
     },
   },
   methods: {
@@ -73,6 +140,17 @@ export default {
 
     toggleMobileNav() {
       this.mobileNav = !this.mobileNav;
+    },
+
+    toggleProfile(e) {
+      if (e.target === this.$refs.profile) {
+        this.profileIsVisible = !this.profileIsVisible;
+      }
+    },
+
+    signOut() {
+      firebase.auth().signOut();
+      window.location.reload();
     },
   },
   created() {
@@ -103,7 +181,8 @@ header {
 
 nav {
   display: flex;
-  // justify-content: space-between;
+  justify-content: space-between;
+  align-content: center;
   padding: 25px 0;
 
   .branding {
@@ -124,19 +203,112 @@ nav {
   }
 
   .nav-links {
-    position: relative;
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: flex-end;
-    white-space: nowrap;
+    .nav-link-container {
+      position: relative;
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+      white-space: nowrap;
 
-    ul {
-      margin-right: 32px;
+      .authFix {
+        margin-top: 5px;
+      }
 
-      .link {
-        &:not(:last-child) {
-          margin-right: 32px;
+      ul {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        margin-right: 32px;
+
+        .link {
+          align-self: center;
+          &:not(:last-child) {
+            margin-right: 32px;
+          }
+        }
+      }
+
+      .profile {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #fff;
+        background-color: #303030;
+
+        span {
+          align-self: center;
+          pointer-events: none;
+        }
+
+        .profile-menu {
+          position: absolute;
+          top: 60px;
+          right: 0;
+          width: 250px;
+          background-color: #303030;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 2px -1px rgba(0, 0, 0, 0.06);
+
+          .info {
+            display: flex;
+            align-content: flex-end;
+            padding: 15px;
+            border-bottom: 1px solid #fff;
+
+            .initials {
+              position: initial;
+              width: 40px;
+              height: 40px;
+              background-color: #fff;
+              color: #303030;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 50%;
+            }
+
+            .right {
+              flex: 1;
+              margin-left: 24px;
+
+              p:nth-child(1) {
+                font-size: 14px;
+              }
+              p:nth-child(2),
+              p:nth-child(3) {
+                font-size: 12px;
+              }
+            }
+          }
+
+          .options {
+            padding: 15px;
+            .option {
+              text-decoration: none;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              &:not(:last-child) {
+                margin-bottom: 18px;
+              }
+
+              .icon {
+                width: 18px;
+                height: auto;
+              }
+
+              p {
+                font-size: 14px;
+                margin-left: 12px;
+              }
+            }
+          }
         }
       }
     }
@@ -169,6 +341,14 @@ nav {
     padding: 15px 0;
     color: #fff;
   }
+}
+
+.profile-animation-enter-active {
+  animation: fade 250ms ease;
+}
+
+.profile-animation-leave-active {
+  animation: fade 250ms ease reverse;
 }
 
 .menu-icon-nav-enter-active {
@@ -255,6 +435,16 @@ nav {
   100% {
     opacity: 1;
     transform: rotate(360deg);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 </style>

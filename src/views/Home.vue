@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <blog-post :post="welcomeScreen"></blog-post>
+    <blog-post v-if="!isAuth" :post="welcomeScreen"></blog-post>
     <blog-post
       v-for="(post, index) in sampleBlogPost"
       :key="index"
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="updates">
+    <div class="updates" v-if="!isAuth">
       <div class="container">
         <h2>Never miss a post. Register for your free account today!</h2>
         <router-link class="router-button" to="#">
@@ -64,6 +64,9 @@ export default {
   computed: {
     sampleBlogCards() {
       return this.$store.getters['blogCardsModule/blogCards'];
+    },
+    isAuth() {
+      return this.$store.getters['authModule/isAuth'];
     },
   },
 };

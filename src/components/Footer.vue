@@ -30,7 +30,7 @@
             <router-link v-if="admin" class="link" :to="{ name: 'CreatePost' }"
               >Create Post</router-link
             >
-            <router-link v-if="!user" class="link" :to="{ name: 'Login' }"
+            <router-link v-if="!isAuth" class="link" :to="{ name: 'Login' }"
               >Login In / Register</router-link
             >
           </ul>
@@ -57,11 +57,11 @@ export default {
     linkedin,
   },
   computed: {
-    user() {
-      return this.$store.state.user;
-    },
     admin() {
-      return this.$store.state.profileAdmin;
+      return this.$store.getters['authModule/profileAdmin'];
+    },
+    isAuth() {
+      return this.$store.getters['authModule/isAuth'];
     },
   },
 };

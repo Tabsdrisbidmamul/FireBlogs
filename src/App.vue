@@ -43,7 +43,6 @@ export default {
       this.$store.dispatch('authModule/authenticateUser', user);
       if (user) {
         this.$store.dispatch('authModule/getCurrentUser');
-        console.log(this.$store.getters['authModule/profile']);
       }
     });
   },
