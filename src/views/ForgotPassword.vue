@@ -1,13 +1,13 @@
 <template>
   <section>
     <Modal
-      modalMessage="An Error Occurred"
+      :modalMessage="modalMessage"
       :open="modalActive"
       @close-modal="closeModal"
     />
     <Loading v-if="isLoading" />
     <div class="form-wrap">
-      <form class="reset" @submit.prevent="submitForm">
+      <form class="reset" @submit.prevent="resetPassword">
         <p class="login-register">
           Back to
           <router-link class="router-link" :to="loginLink">Login</router-link>
@@ -17,7 +17,7 @@
         <div class="inputs">
           <div class="input">
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               v-model="email.val"
               @blur="clearValidation('email')"
@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import Email from '../assets/Icons/envelope-regular.svg';
 import Loading from '../components/utils/Loading.vue';
 import Modal from '../components/utils/Modal.vue';
@@ -76,21 +79,35 @@ export default {
     validation() {
       this.formIsValid = true;
 
-      if (this.email.val === '' || !this.email.val.includes('@')) {
+      if (this.email.val === '') {
         this.email.isValid = false;
         this.formIsValid = false;
-        this.modalActive = true;
       }
     },
 
-    submitForm() {
+    resetPassword() {
       this.validation();
 
-      const formData = {
-        email: this.email.val,
-      };
+      if (!this.formIsValid) {
+        this.modalMessage = 'Empty email was entered';
+        this.modalActive = true;
+      }
 
-      console.log(formData);
+      this.isLoading = true;
+      firebase
+        .auth()
+        .sendPasswordResetEmail(this.email.val)
+        .then(() => {
+          this.isLoading = false;
+          this.modalMessage =
+            'If your account exists, you will receive an email message';
+          this.modalActive = true;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.modalMessage = error.message;
+          this.modalActive = true;
+        });
     },
   },
 };

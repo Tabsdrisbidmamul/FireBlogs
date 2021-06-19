@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
 import FooterVue from './components/Footer.vue';
 import Navigation from './components/Navigation.vue';
 
@@ -35,7 +38,15 @@ export default {
       return true;
     },
   },
-  created() {},
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.dispatch('authModule/authenticateUser', user);
+      if (user) {
+        this.$store.dispatch('authModule/getCurrentUser');
+        console.log(this.$store.getters['authModule/profile']);
+      }
+    });
+  },
   mounted() {},
   methods: {},
   watch: {},

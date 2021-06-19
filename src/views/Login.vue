@@ -53,7 +53,6 @@
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import db from '../firebase/firebaseInit';
 
 import Email from '../assets/Icons/envelope-regular.svg';
 import Password from '../assets/Icons/lock-alt-solid.svg';
@@ -115,7 +114,6 @@ export default {
 
       // 1. Authenticate and login the user
       this.isLoading = true;
-      console.log(db);
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email.val, this.password.val)

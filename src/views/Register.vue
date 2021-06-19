@@ -94,7 +94,6 @@
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import db from '../firebase/firebaseInit';
 
 import Email from '../assets/Icons/envelope-regular.svg';
 import Password from '../assets/Icons/lock-alt-solid.svg';
@@ -214,7 +213,7 @@ export default {
         const result = await createUser;
 
         // 2. Add the newly created user to the 'users' collection
-        const database = db.collection('users').doc(result.user.uid);
+        const database = this.$db.collection('users').doc(result.user.uid);
         await database
           .set({
             firstName: this.firstName.val,
