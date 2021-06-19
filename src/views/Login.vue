@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import '@firebase/auth';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import db from '../firebase/firebaseInit';
 
 import Email from '../assets/Icons/envelope-regular.svg';
