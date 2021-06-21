@@ -22,6 +22,14 @@ const routes = [
     component: () => import('../views/Blogs.vue'),
   },
   {
+    path: '/create-post',
+    meta: {
+      title: 'Create Post',
+    },
+    name: 'CreatePost',
+    component: () => import('../views/CreatePost.vue'),
+  },
+  {
     path: '/login',
     meta: {
       title: 'Login',

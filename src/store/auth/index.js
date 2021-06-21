@@ -6,6 +6,11 @@ export default {
   namespaced: true,
   state() {
     return {
+      blogHTML: 'Write your blog title here...',
+      blogTitle: '',
+      blogPhotoName: '',
+      blogPhotoFileURL: null,
+      blogPhotoPreview: null,
       editPost: null,
       user: null,
       profileAdmin: null,
@@ -45,6 +50,12 @@ export default {
     setUserName(state, payload) {
       state.profileUserName = payload;
     },
+    setBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    setBlogPost(state, payload) {
+      state.blogHTML = payload;
+    },
   },
   actions: {
     toggleEditPost(context, payload) {
@@ -81,6 +92,12 @@ export default {
     changeUserName(context, payload) {
       context.commit('setUserName', payload);
     },
+    newBlogPost(context, payload) {
+      context.commit('setBlogPost', payload);
+    },
+    updateBlogTitle(context, payload) {
+      context.commit('setBlogTitle', payload);
+    },
   },
   getters: {
     isAuth(state) {
@@ -96,6 +113,15 @@ export default {
         email: state.profileEmail,
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
+      };
+    },
+    blog(state) {
+      return {
+        blogHTML: state.blogHTML,
+        blogTitle: state.blogTitle,
+        blogPhotoName: state.blogPhotoName,
+        blogPhotoFileURL: state.blogPhotoFileURL,
+        blogPhotoPreview: state.blogPhotoPreview,
       };
     },
     profileInitials(state) {

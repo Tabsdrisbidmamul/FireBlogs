@@ -11,7 +11,9 @@
             <ul :class="{ authFix: !isAuth }">
               <router-link class="link" :to="homeLink">Home</router-link>
               <router-link class="link" :to="blogsLink">Blogs</router-link>
-              <router-link class="link" to="#">Create Post</router-link>
+              <router-link class="link" :to="createPostLink"
+                >Create Post</router-link
+              >
               <router-link class="link" :to="authLink" v-if="!isAuth"
                 >Login/Register</router-link
               >
@@ -67,7 +69,7 @@
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" :to="homeLink">Home</router-link>
         <router-link class="link" :to="blogsLink">Blogs</router-link>
-        <router-link class="link" to="#">Create Post</router-link>
+        <router-link class="link" :to="createPostLink">Create Post</router-link>
         <router-link v-if="!isAuth" class="link" :to="authLink"
           >Login/Register</router-link
         >
@@ -116,6 +118,9 @@ export default {
     },
     adminLink() {
       return { name: 'Admin' };
+    },
+    createPostLink() {
+      return { name: 'CreatePost' };
     },
     profileInitials() {
       return this.$store.getters['authModule/profileInitials'];
