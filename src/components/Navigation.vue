@@ -35,13 +35,13 @@
                   </div>
                   <div class="options">
                     <div class="option">
-                      <router-link class="option" to="#">
+                      <router-link class="option" :to="profileLink">
                         <userIcon class="icon" />
                         <p>Profile</p>
                       </router-link>
                     </div>
                     <div class="option">
-                      <router-link class="option" to="#">
+                      <router-link class="option" :to="adminLink">
                         <adminIcon class="icon" />
                         <p>Admin</p>
                       </router-link>
@@ -110,6 +110,12 @@ export default {
     },
     authLink() {
       return { name: 'Login' };
+    },
+    profileLink() {
+      return { name: 'Profile' };
+    },
+    adminLink() {
+      return { name: 'Admin' };
     },
     profileInitials() {
       return this.$store.getters['authModule/profileInitials'];

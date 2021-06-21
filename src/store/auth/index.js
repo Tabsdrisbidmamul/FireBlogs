@@ -36,6 +36,15 @@ export default {
         state.profileFirstName.match(/(\b\S)?/g).join('') +
         state.profileLastName.match(/(\b\S)?/g).join('');
     },
+    setFirstName(state, payload) {
+      state.profileFirstName = payload;
+    },
+    setLastName(state, payload) {
+      state.profileLastName = payload;
+    },
+    setUserName(state, payload) {
+      state.profileUserName = payload;
+    },
   },
   actions: {
     toggleEditPost(context, payload) {
@@ -51,6 +60,26 @@ export default {
       const databaseResults = await database.get();
       context.commit('setProfileInfo', databaseResults);
       context.commit('setProfileInitials');
+    },
+    async updateUserSettings(context) {
+      const { id, firstName, lastName, userName } = context.getters.profile;
+
+      const database = await db.collection('users').doc(id);
+      await database.update({
+        firstName,
+        lastName,
+        userName,
+      });
+      context.commit('setProfileInitials');
+    },
+    changeFirstName(context, payload) {
+      context.commit('setFirstName', payload);
+    },
+    changeLastName(context, payload) {
+      context.commit('setLastName', payload);
+    },
+    changeUserName(context, payload) {
+      context.commit('setUserName', payload);
     },
   },
   getters: {
