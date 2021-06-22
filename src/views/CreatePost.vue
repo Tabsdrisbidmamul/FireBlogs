@@ -1,6 +1,6 @@
 <template>
   <div class="create-post">
-    <BlogCoverPreview v-show="this.$store.state.blogPhotoPreview" />
+    <BlogCoverPreview v-show="blogCoverPreview" />
     <Loading v-show="loading" />
     <div class="container">
       <div :class="{ invisible: !error }" class="err-message">
@@ -38,12 +38,12 @@
           :editorOptions="editorSettings"
           v-model="blogHTML"
           useCustomImageHandler
-          
+          @image-added="imageHandler"
         />
       </div>
       <div class="blog-actions">
         <button @click="uploadBlog">Publish Blog</button>
-        <router-link class="router-button" :to="{ name: 'BlogPreview' }"
+        <router-link class="router-button" :to="blogPreviewLink"
           >Post Preview</router-link
         >
       </div>
@@ -85,12 +85,15 @@ export default {
     fileChange() {
       this.file = this.$refs.blogPhoto.files[0];
       const fileName = this.file.name;
-      this.$store.commit('fileNameChange', fileName);
-      this.$store.commit('createFileURL', URL.createObjectURL(this.file));
+      this.$store.dispatch('authModule/fileNameChange', fileName);
+      this.$store.dispatch(
+        'authModule/createFileURL',
+        URL.createObjectURL(this.file)
+      );
     },
 
     openPreview() {
-      this.$store.commit('openPhotoPreview');
+      this.$store.dispatch('authModule/openPhotoPreview');
     },
 
     imageHandler(file, Editor, cursorLocation, resetUploader) {
@@ -169,6 +172,9 @@ export default {
     },
   },
   computed: {
+    blogPreviewLink() {
+      return { name: 'BlogPreview' };
+    },
     profileId() {
       return this.$store.getters['authModule/profile'].id;
     },
@@ -185,6 +191,9 @@ export default {
       set(payload) {
         this.$store.dispatch('authModule/updateBlogTitle', payload);
       },
+    },
+    blogCoverPreview() {
+      return this.$store.getters['authModule/blog'].blogPhotoPreview;
     },
     blogHTML: {
       get() {

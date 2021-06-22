@@ -56,6 +56,15 @@ export default {
     setBlogPost(state, payload) {
       state.blogHTML = payload;
     },
+    setFileName(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    setFileURL(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
+    setOpenPhotoPreview(state) {
+      state.blogPhotoPreview = !state.blogPhotoPreview;
+    },
   },
   actions: {
     toggleEditPost(context, payload) {
@@ -82,6 +91,15 @@ export default {
         userName,
       });
       context.commit('setProfileInitials');
+    },
+    openPhotoPreview(context) {
+      context.commit('setOpenPhotoPreview');
+    },
+    fileNameChange(context, payload) {
+      context.commit('setFileName', payload);
+    },
+    createFileURL(context, payload) {
+      context.commit('setFileURL', payload);
     },
     changeFirstName(context, payload) {
       context.commit('setFirstName', payload);

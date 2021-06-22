@@ -30,6 +30,14 @@ const routes = [
     component: () => import('../views/CreatePost.vue'),
   },
   {
+    path: '/preview-post',
+    meta: {
+      title: 'Preview Blog Post',
+    },
+    name: 'BlogPreview',
+    component: () => import('../views/BlogPreview.vue'),
+  },
+  {
     path: '/login',
     meta: {
       title: 'Login',

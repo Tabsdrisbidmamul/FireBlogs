@@ -15,12 +15,12 @@ export default {
   },
   methods: {
     closePreview() {
-      this.$store.commit('openPhotoPreview');
+      this.$store.dispatch('authModule/openPhotoPreview');
     },
   },
   computed: {
     blogCoverPhoto() {
-      return this.$store.state.blogPhotoFileURL;
+      return this.$store.getters['authModule/blog'].blogPhotoFileURL;
     },
   },
 };
